@@ -16,20 +16,20 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
 
             $table->bigIncrements('id');
-            $table->string('username',64);
-            $table->string('email',64)->unique();
+            $table->string('username', 64);
+            $table->string('email', 64)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-			$table->string('profile_photo')->nullable();
-			$table->string('profile_bg')->nullable();;
-			$table->Unsignedinteger('role_users_id');
-			$table->tinyInteger('is_active')->nullable();
-			$table->string('contact_no',15);
-			$table->string('last_login_ip',32)->nullable();
-			$table->timestampTz('last_login_date','2')->nullable();
+            $table->string('profile_photo')->nullable();
+            $table->string('profile_bg')->nullable();;
+            $table->unsignedBigInteger('role_users_id');
+            $table->tinyInteger('is_active')->nullable();
+            $table->string('contact_no', 15);
+            $table->string('last_login_ip', 32)->nullable();
+            $table->timestampTz('last_login_date', '2')->nullable();
             $table->rememberToken();
             $table->timestamps();
-			$table->softDeletes();
+            $table->softDeletes();
             $table->foreign('role_users_id')->references('id')->on('role_users');
         });
     }

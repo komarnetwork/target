@@ -10,11 +10,11 @@ $db_name = $_POST['dbname'];
 
 
 $url = 'https://peopleprohrm.com/purchaseverify/';
-$post_string = 'purchasecode='.urlencode($purchase_code);
+$post_string = 'purchasecode=' . urlencode($purchase_code);
 $ch = curl_init();
-curl_setopt($ch,CURLOPT_URL, $url);
-curl_setopt($ch,CURLOPT_POST, true);
-curl_setopt($ch,CURLOPT_POSTFIELDS, $post_string);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $result = curl_exec($ch);
 $object = new \stdClass();
@@ -27,33 +27,31 @@ if ($object->codecheck) {
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $dbh->exec($object->dbdata);
 
-		require '../vendor/autoload.php';
-		$dot = Dotenv::create('../');
-		$dot->load();
+        require '../vendor/autoload.php';
+        $dot = Dotenv::create('../');
+        $dot->load();
 
-		$path = '../.env';
+        $path = '../.env';
 
         if (file_exists($path)) {
-			$searchArray = array('DB_HOST='.env('DB_HOST'), 'DB_DATABASE='.env('DB_DATABASE'), 'DB_USERNAME='.env('DB_USERNAME'), 'DB_PASSWORD='.env('DB_PASSWORD'), 'USER_VERIFIED='.env('USER_VERIFIED'));
-			$replaceArray = array('DB_HOST='.$db_host, 'DB_DATABASE='.$db_name, 'DB_USERNAME='.$db_user, 'DB_PASSWORD='.$db_password, 'USER_VERIFIED=1');
+            $searchArray = array('DB_HOST=' . env('DB_HOST'), 'DB_DATABASE=' . env('DB_DATABASE'), 'DB_USERNAME=' . env('DB_USERNAME'), 'DB_PASSWORD=' . env('DB_PASSWORD'), 'USER_VERIFIED=' . env('USER_VERIFIED'));
+            $replaceArray = array('DB_HOST=' . $db_host, 'DB_DATABASE=' . $db_name, 'DB_USERNAME=' . $db_user, 'DB_PASSWORD=' . $db_password, 'USER_VERIFIED=1');
 
             file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
         }
 
-       $dir = '../install';
-       $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
-       $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
-       foreach($files as $file) {
-           if ($file->isDir()){
-               rmdir($file->getRealPath());
-           } else {
-               unlink($file->getRealPath());
-           }
-       }
-       rmdir($dir);
-
-    }
-    catch(PDOException $e) {
+        $dir = '../install';
+        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+        rmdir($dir);
+    } catch (PDOException $e) {
         header("location: step3.php?_error=2");
         exit;
     }
@@ -65,6 +63,7 @@ if ($object->codecheck) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>PeoplePro Installer</title>
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico">
@@ -73,23 +72,24 @@ if ($object->codecheck) {
     <link href="assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="col-md-6 offset-md-3">
         <div class='wrapper'>
             <header>
-                <img src="assets/images/logo.png" alt="Logo"/>
+                <img src="assets/images/logo.png" alt="Logo" />
                 <h1 class="text-center">PeoplePro Auto Installer</h1>
             </header>
             <hr>
             <div class="content pad-top-bot-50">
                 <p>
-                    <h5><strong class="theme-color">Congratulations!</strong>
+                <h5><strong class="theme-color">Congratulations!</strong>
                     You have successfully installed PeoplePro!</h5><br>
-                    Please login here -  <strong><a href="<?php echo '../'; ?>">Login</a></strong>
-                    <br>
-                    Username: <strong>admin</strong><br>
-                    Password: <strong>admin</strong><br><br>
-                    After login, go to Settings to change other Configurations.
+                Please login here - <strong><a href="<?php echo '../'; ?>">Login</a></strong>
+                <br>
+                Username: <strong>admin</strong><br>
+                Password: <strong>admin</strong><br><br>
+                After login, go to Settings to change other Configurations.
                 </p>
                 <strong>Note: </strong><i>If 'install' folder exists in your project folder, please delete it ('install' folder)</i>.
             </div>
@@ -99,5 +99,5 @@ if ($object->codecheck) {
     </div>
 
 </body>
-</html>
 
+</html>
